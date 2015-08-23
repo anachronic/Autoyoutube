@@ -10,23 +10,34 @@ import java.io.PrintWriter;
 public class App {
     private static final String TEMP_DIR = ".temp";
     private static final String APP_NAME = "Autoyoutube";
+
+    private static final String DEFAULT_SEPARATOR = " - ";
     public static String workingDir;
     public static String tempDir;
 
-    private static Options makeOptions(){
+    private static Options makeOptions() {
         Options options = new Options();
 
         Option url = Option.builder("u").hasArg().longOpt("url").required().
-                desc("URL to scan (either a video or playlist)").argName("URL").build();
+                desc("URL to scan (either a video or playlist) [REQUIRED]").argName("URL").build();
         Option playlist = Option.builder("p").hasArg(false).longOpt("playlist").required(false)
                 .desc("Setting this options indicates that this URL is a playlist").build();
         Option backwards = Option.builder("b").hasArg(false).longOpt("backwards").required(false)
                 .desc("Setting this option indicates that the title and song are backwards. e.g: Song - Artist")
                 .build();
+        Option ignore = Option.builder("i").hasArg().required(false).longOpt("ignore")
+                .desc("Setting this option ignores everything after (and including) the specified argument in the YouTube " +
+                        "video String. e.g: Using this option with a video with title 'Artist - Song // garbage.' will ignore " +
+                        "the '// garbage' string so it will parse only what is necessary.").build();
+        Option separator = Option.builder("s").hasArg().required(false).longOpt("separator")
+                .desc("Sepecifying this option changes the string separator between artist and song name string")
+                .build();
 
         options.addOption(url);
         options.addOption(playlist);
         options.addOption(backwards);
+        options.addOption(ignore);
+        options.addOption(separator);
 
         return options;
     }
@@ -53,15 +64,28 @@ public class App {
             System.exit(1);
         }
 
-        String url = line.getOptionValue('u');
+        if (line.hasOption('p')) {
+            throw new UnsupportedOperationException("Playlist downloading is not implemented yet");
+        }
+        String url;
+        String separator;
+        String ignore = null;
+
+        if (line.hasOption('i')) {
+            ignore = line.getOptionValue('i');
+        }
+
+        if (line.hasOption('s')) separator = line.getOptionValue('s');
+        else separator = DEFAULT_SEPARATOR;
+
+        url = line.getOptionValue('u');
 
         Song aSong = new Song(url);
 
-        if(line.hasOption('b')) aSong.downloadWithTags(false);
-        else aSong.downloadWithTags(true);
+        aSong.downloadWithTags(!line.hasOption('b'), separator, ignore); //if tag is present send false.
     }
 
-    public static void usage(final OutputStream out, final Options options){
+    public static void usage(final OutputStream out, final Options options) {
         final PrintWriter writer = new PrintWriter(out);
 
         final HelpFormatter help = new HelpFormatter();
@@ -69,7 +93,7 @@ public class App {
         writer.close();
     }
 
-    public static void help(final OutputStream out, final Options options){
+    public static void help(final OutputStream out, final Options options) {
         final PrintWriter writer = new PrintWriter(out);
 
         String header = "autoyoutube Help";
@@ -80,7 +104,7 @@ public class App {
         writer.close();
     }
 
-    public static String getUsageString(){
-        return "autoyoutube -u <URL> [-p]";
+    public static String getUsageString() {
+        return "autoyoutube -u <URL> [-p] [-b] [-i ignoreString]";
     }
 }

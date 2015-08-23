@@ -3,6 +3,7 @@ package org.anachronic.autoyoutube;
 
 import com.mpatric.mp3agic.*;
 import org.anachronic.autoyoutube.exceptions.ExceptionMessages;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Song {
+
+    public static final String VIDEO_URL_BASE = "https://www.youtube.com?watch?v=";
 
     private String url;
     private String command;
@@ -104,11 +107,16 @@ public class Song {
     }
 
     public void downloadWithTags(boolean artistExpectedAtBeginning) {
-        downloadWithTags(artistExpectedAtBeginning, " - ");
+        downloadWithTags(artistExpectedAtBeginning, " - ", null);
     }
 
-    public void downloadWithTags(boolean artistExpectedAtBeginning, String separator) {
+    public void downloadWithTags(boolean artistExpectedAtBeginning, String separator, String ignoreAfter) {
         String title = getTitle();
+
+        if(!StringUtils.isBlank(ignoreAfter)){
+            int start = title.indexOf(ignoreAfter);
+            title = title.substring(0, start).trim();
+        }
 
         System.out.println("Downloading: " + title);
 
