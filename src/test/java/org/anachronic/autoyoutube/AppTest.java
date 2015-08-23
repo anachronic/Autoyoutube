@@ -59,4 +59,9 @@ public class AppTest {
             System.out.println(s);
         }
     }
+
+    @Test
+    public void workingDirTest() throws Exception{
+        System.out.println(System.getProperty("user.dir"));
+    }
 }

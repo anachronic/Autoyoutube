@@ -2,43 +2,40 @@ package org.anachronic.autoyoutube;
 
 
 import com.mpatric.mp3agic.*;
+import org.anachronic.autoyoutube.exceptions.ExceptionMessages;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.UUID;
 
 public class Song {
 
     private String url;
     private String command;
-    private String uuid;
+    private String destination;
+
+    private static final String FFMPEG_DESTINATION_STRING = "[ffmpeg] Destination: ";
 
     public Song(String url) {
         this.url = url;
 
-        this.uuid = UUID.randomUUID().toString() + ".mp3";
-        this.command = "youtube-dl -x " + url + " --audio-format mp3 -o " + this.uuid;
-    }
-
-    private static void reportIOEx() {
-        System.err.println("Can't read/write process output. Check that you have ffmpeg and youtube-dl installed");
-        System.err.println("Don't forget to check that you can actually run those processes.");
-        System.err.println("Exiting...");
+        this.destination = null;
+        this.command = "youtube-dl -x " + url + " --audio-format mp3";
     }
 
     public String getTitle() {
         Runtime rt = Runtime.getRuntime();
-        String thecommand = this.command + " -e";
+        String thecommand = this.command + " -e --encoding UTF-8";
         Process proc = null;
         try {
             proc = rt.exec(thecommand);
         } catch (IOException e) {
-            reportIOEx();
+            ExceptionMessages.reportProcessIOEx();
+            System.exit(-1);
         }
 
-        BufferedReader stdInput = new BufferedReader(new
-                InputStreamReader(proc.getInputStream()));
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
         String s;
         String result = null;
@@ -47,7 +44,7 @@ public class Song {
                 result = s;
             }
         } catch (IOException e) {
-            reportIOEx();
+            ExceptionMessages.reportProcessIOEx();
         }
 
         try {
@@ -69,6 +66,7 @@ public class Song {
     }
 
     private boolean mp3Download() {
+        System.setProperty("user.dir", App.tempDir);
         Runtime r = Runtime.getRuntime();
         Process proc = null;
         try {
@@ -77,6 +75,20 @@ public class Song {
 
             return false;
         }
+
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+        String line = "";
+
+        try {
+            while((line = stdInput.readLine()) != null){
+                if(line.startsWith(FFMPEG_DESTINATION_STRING)){
+                    destination = line.substring(FFMPEG_DESTINATION_STRING.length());
+                }
+            }
+        } catch (IOException e) {
+            ExceptionMessages.reportProcessIOEx();
+        }
+
 
         try {
             int result = proc.waitFor();
@@ -96,12 +108,14 @@ public class Song {
     }
     public void downloadWithTags(boolean artistExpectedAtBeginning, String separator) {
         String title = getTitle();
+        System.out.println(title);
 
         mp3Download();
 
         Mp3File thisFile = null;
         try {
-            thisFile = new Mp3File(this.uuid);
+            File mp3f = new File(this.destination);
+            thisFile = new Mp3File(mp3f);
         } catch (Exception e){
             System.err.println("Can't seem to open and/or read the downloaded file. Does it exist?");
             System.err.println("Is it an mp3 file?");
@@ -136,9 +150,16 @@ public class Song {
         thisFile.setId3v2Tag(tag);
 
         try {
+            System.setProperty("user.dir", App.workingDir);
             thisFile.save(artist + " - " + songName + ".mp3");
         } catch (Exception e){
-            System.err.println("Can't save the new downloaded file. Do you have write permissions on this folder?");
+            ExceptionMessages.reportFileIOEx();
+        }
+
+        System.setProperty("user.dir", App.tempDir);
+        File oldfile = new File(destination);
+        if(!oldfile.delete()){
+            System.err.println("WARNING: could not remove the old file.");
         }
     }
 }
