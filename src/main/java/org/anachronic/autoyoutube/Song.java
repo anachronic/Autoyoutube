@@ -68,7 +68,7 @@ public class Song {
     private boolean mp3Download() {
         System.setProperty("user.dir", App.tempDir);
         Runtime r = Runtime.getRuntime();
-        Process proc = null;
+        Process proc;
         try {
             proc = r.exec(this.command);
         } catch (IOException e) {
@@ -77,11 +77,11 @@ public class Song {
         }
 
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-        String line = "";
+        String line = null;
 
         try {
-            while((line = stdInput.readLine()) != null){
-                if(line.startsWith(FFMPEG_DESTINATION_STRING)){
+            while ((line = stdInput.readLine()) != null) {
+                if (line.startsWith(FFMPEG_DESTINATION_STRING)) {
                     destination = line.substring(FFMPEG_DESTINATION_STRING.length());
                 }
             }
@@ -106,9 +106,11 @@ public class Song {
     public void downloadWithTags(boolean artistExpectedAtBeginning) {
         downloadWithTags(artistExpectedAtBeginning, " - ");
     }
+
     public void downloadWithTags(boolean artistExpectedAtBeginning, String separator) {
         String title = getTitle();
-        System.out.println(title);
+
+        System.out.println("Downloading: " + title);
 
         mp3Download();
 
@@ -116,7 +118,7 @@ public class Song {
         try {
             File mp3f = new File(this.destination);
             thisFile = new Mp3File(mp3f);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Can't seem to open and/or read the downloaded file. Does it exist?");
             System.err.println("Is it an mp3 file?");
             System.exit(0);
@@ -136,7 +138,7 @@ public class Song {
 
         String[] split = title.split(separator);
         String artist, songName;
-        if(artistExpectedAtBeginning){
+        if (artistExpectedAtBeginning) {
             artist = split[0];
             songName = split[1];
         } else {
@@ -152,14 +154,16 @@ public class Song {
         try {
             System.setProperty("user.dir", App.workingDir);
             thisFile.save(artist + " - " + songName + ".mp3");
-        } catch (Exception e){
+        } catch (Exception e) {
             ExceptionMessages.reportFileIOEx();
         }
 
         System.setProperty("user.dir", App.tempDir);
         File oldfile = new File(destination);
-        if(!oldfile.delete()){
+        if (!oldfile.delete()) {
             System.err.println("WARNING: could not remove the old file.");
         }
+
+        System.out.println("Finished: " + title);
     }
 }

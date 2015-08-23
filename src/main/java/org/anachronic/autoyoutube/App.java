@@ -14,11 +14,11 @@ public class App {
         File tempdir = new File(TEMP_DIR);
         workingDir = System.getProperty("user.dir");
 
-        if (!tempdir.exists()) {
-            if (tempdir.mkdir()) tempDir = System.getProperty("user.dir") + "/" + TEMP_DIR;
-            else tempDir = workingDir;
+        if (tempdir.exists() || tempdir.mkdir()) {
+            tempDir = System.getProperty("user.dir") + "/" + TEMP_DIR;
+        } else {
+            tempDir = workingDir;
         }
-
 
         Song aSong = new Song(url);
         aSong.downloadWithTags(true);
