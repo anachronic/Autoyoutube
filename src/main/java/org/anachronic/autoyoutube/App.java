@@ -64,9 +64,6 @@ public class App {
             System.exit(1);
         }
 
-        if (line.hasOption('p')) {
-            throw new UnsupportedOperationException("Playlist downloading is not implemented yet");
-        }
         String url;
         String separator;
         String ignore = null;
@@ -79,10 +76,16 @@ public class App {
         else separator = DEFAULT_SEPARATOR;
 
         url = line.getOptionValue('u');
+        boolean artistFirst = !line.hasOption('b');
 
-        Song aSong = new Song(url);
+        if (line.hasOption('p')) {
+            Playlist playlist = new Playlist(url);
+            playlist.downloadAllSongs(artistFirst, separator, ignore);
+        } else {
+            Song aSong = new Song(url);
+            aSong.downloadWithTags(!line.hasOption('b'), separator, ignore); //if tag is present send false.
+        }
 
-        aSong.downloadWithTags(!line.hasOption('b'), separator, ignore); //if tag is present send false.
     }
 
     public static void usage(final OutputStream out, final Options options) {

@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 
 public class Song {
 
-    public static final String VIDEO_URL_BASE = "https://www.youtube.com?watch?v=";
+    public static final String VIDEO_URL_BASE = "https://www.youtube.com/watch?v=";
 
     private String url;
     private String command;
@@ -146,12 +146,16 @@ public class Song {
 
         String[] split = title.split(separator);
         String artist, songName;
-        if (artistExpectedAtBeginning) {
-            artist = split[0];
-            songName = split[1];
+        if (split.length > 1) {
+            if (artistExpectedAtBeginning) {
+                artist = split[0];
+                songName = split[1];
+            } else {
+                artist = split[1];
+                songName = split[0];
+            }
         } else {
-            artist = split[1];
-            songName = split[0];
+            artist = songName = split[0];
         }
 
         tag.setArtist(artist);
@@ -171,6 +175,7 @@ public class Song {
         if (!oldfile.delete()) {
             System.err.println("WARNING: could not remove the old file.");
         }
+        System.setProperty("user.dir", App.workingDir);
 
         System.out.println("Finished: " + title);
     }
