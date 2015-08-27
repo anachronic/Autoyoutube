@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class AppTest {
+public class ShellMainTest {
     ClassLoader cl;
     String mp3testfile;
 

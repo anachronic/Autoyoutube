@@ -69,7 +69,7 @@ public class Song {
     }
 
     private boolean mp3Download() {
-        System.setProperty("user.dir", App.tempDir);
+        System.setProperty("user.dir", ShellMain.tempDir);
         Runtime r = Runtime.getRuntime();
         Process proc;
         try {
@@ -164,18 +164,18 @@ public class Song {
         thisFile.setId3v2Tag(tag);
 
         try {
-            System.setProperty("user.dir", App.workingDir);
+            System.setProperty("user.dir", ShellMain.workingDir);
             thisFile.save(artist + " - " + songName + ".mp3");
         } catch (Exception e) {
             ExceptionMessages.reportFileIOEx();
         }
 
-        System.setProperty("user.dir", App.tempDir);
+        System.setProperty("user.dir", ShellMain.tempDir);
         File oldfile = new File(destination);
         if (!oldfile.delete()) {
             System.err.println("WARNING: could not remove the old file.");
         }
-        System.setProperty("user.dir", App.workingDir);
+        System.setProperty("user.dir", ShellMain.workingDir);
 
         System.out.println("Finished: " + title);
     }

@@ -1,13 +1,14 @@
 package org.anachronic.autoyoutube;
 
 
+import org.anachronic.autoyoutube.app.AppContext;
 import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-public class App {
+public class ShellMain {
     private static final String TEMP_DIR = ".temp";
     private static final String APP_NAME = "Autoyoutube";
 
@@ -43,11 +44,11 @@ public class App {
     }
 
     public static void main(String[] args) {
-        File tempdir = new File(TEMP_DIR);
+        File tempdir = new File(AppContext.TEMP_DIR);
         workingDir = System.getProperty("user.dir");
 
         if (tempdir.exists() || tempdir.mkdir()) {
-            tempDir = System.getProperty("user.dir") + "/" + TEMP_DIR;
+            tempDir = System.getProperty("user.dir") + "/" + AppContext.TEMP_DIR;
         } else {
             tempDir = workingDir;
         }
