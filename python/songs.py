@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import youtube_dl
+import os
 
 
 class DontShowLogger(object):
@@ -41,13 +42,10 @@ class Song(object):
             'outtmpl': '%(id)s.%(ext)s',
         }
 
-        # ydl_opts = {
-        #     'format': "bestaudio/best",
-        #     'extractaudio': True,
-        #     'audioformat': 'mp3',
-        #     'outtmpl': '/home/nsalas/%(id)s.%(ext)s',
-        #     'noplaylist': True,
-        # }
-
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.url])
+
+    def rename(self, desiredname):
+        # TODO: Maybe get absolute path from song and desired name? (or at
+        # least save current directory...)
+        os.rename(str(self.info['id']) + '.mp3', str(desiredname) + '.mp3')
