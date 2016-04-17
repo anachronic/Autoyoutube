@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
-import youtube_dl
 import os
+import youtube_dl
+
+from mutagen.easyid3 import EasyID3
 
 
 class DontShowLogger(object):
@@ -44,6 +46,26 @@ class Song(object):
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.url])
+
+    def put_tags(self, artistfirst=True, separator='-'):
+        file = self.info['id'] + '.mp3'
+
+        striped = [x.strip() for x in self.gettitle().split(separator)]
+
+        if(artistfirst):
+            artist = striped[0]
+            name = striped[1]
+        else:
+            artist = striped[1]
+            name = striped[0]
+
+        audio = EasyID3(file)
+        audio['title'] = name
+        audio['artist'] = artist
+
+        audio.save()
+
+        self.rename(artist + ' - ' + name)
 
     def rename(self, desiredname):
         # TODO: Maybe get absolute path from song and desired name? (or at
