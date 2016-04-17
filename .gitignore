@@ -4,3 +4,5 @@ target
 .DS_Store
 bin
 *.mp3
+*.pyc
+__pycache__
