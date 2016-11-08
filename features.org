@@ -6,16 +6,26 @@ Of course, this is *not* a readme. This file is intended to help myself organize
 
 This project is intended to do as much work as it possibly can to:
 
-** TODO Work [0/5]
-- [ ] Infer the title
-- [ ] Infer the artist
-- [ ] Chop off unnecessary strings in the video like: (OFFICIAL VIDEO)
-- [ ] Put artist and title in ID3v2 tags.
+** TODO Work [4/5]
+- [X] Infer the title
+- [X] Infer the artist
+- [X] Chop off unnecessary strings in the video like: (OFFICIAL VIDEO)
+- [X] Put artist and title in ID3v2 tags.
 - [ ] Get metadata from other services in order to (maybe) fill the tags.
   Tags including:
   - [ ] Album art
   - [ ] Gender maybe.
   - [ ] Could be others, we'll see
+
+** TODO UI [2/8]
+1. [X] Get a minimal window to show
+2. [X] Show an input field and a download button
+3. [ ] Make them show results (for a song first)
+4. [ ] The same as above except with playlists
+5. [ ] If the UI gets too cluttered, change UI definitions to Glade
+6. [ ] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
+7. [ ] Add button to flip artist and song name.
+8. [ ] More to come...
 
 
 

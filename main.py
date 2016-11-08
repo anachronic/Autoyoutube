@@ -1,7 +1,10 @@
-from songs import Song
+from ui.aytwindow import AytWindow
 
-promises = Song('https://www.youtube.com/watch?v=yExPBSDnbU8')
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
-print(promises.get_title())
-print(promises.get_id())
-promises.download()
+win = AytWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()
