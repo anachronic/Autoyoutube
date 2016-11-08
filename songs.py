@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
-import os
-import youtube_dl
 
+import json
+import os
+
+import youtube_dl
 from mutagen.easyid3 import EasyID3
 
 YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
@@ -54,10 +56,42 @@ class Song(object):
 
         self.location = self.info['id'] + '.mp3'
 
+    # This gets a string like
+    # (HQ) Gramatik - While I Was Playin' Fair [Beatz & Pieces Vol. 1]
+    # To Gramatik - While I Was Playin' Fair
+    # Of course, this returns a string, so don't use it outside this class
+    def strip_bad_words(self, strings_file):
+        strings = json.load(open(str(strings_file)))
+        title = self.get_title()
+        print(title)
+
+        for badpair in strings['delete_inside']:
+            start = badpair[0]
+            end = badpair[1]
+
+            i = title.find(start)
+            k = title.find(end)
+            if i == -1 or k == -1:
+                continue
+
+            # we have the indexes for the parenthesis: i and k.
+            inside = title[i + 1:k].lower()
+
+            delete = True
+            for goodword in strings['good_words']:
+                delete = delete and inside.find(goodword) == -1
+
+            if delete:
+                title = title[0:i] + title[k+1:]
+                title = title.strip()
+
+        return title
+
     def put_tags(self, artistfirst=True, separator='-'):
         file = self.location
+        title = self.get_title.strip_bad_words('strings.json')
 
-        striped = [x.strip() for x in self.get_title().split(separator)]
+        striped = [x.strip() for x in title.split(separator)]
 
         if (artistfirst):
             artist = striped[0]
