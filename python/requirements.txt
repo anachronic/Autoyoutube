@@ -1,0 +1,2 @@
+mutagen==1.35
+youtube-dl==2016.11.4
