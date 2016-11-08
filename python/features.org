@@ -1,0 +1,60 @@
+* Autoyoutube
+
+It's a project designed to reliably, quickly and *lazily* download songs from youtube.
+
+Of course, this is *not* a readme. This file is intended to help myself organize on what to do on each step of the way.
+
+This project is intended to do as much work as it possibly can to:
+
+** TODO Work [0/5]
+- [ ] Infer the title
+- [ ] Infer the artist
+- [ ] Chop off unnecessary strings in the video like: (OFFICIAL VIDEO)
+- [ ] Put artist and title in ID3v2 tags.
+- [ ] Get metadata from other services in order to (maybe) fill the tags.
+  Tags including:
+  - [ ] Album art
+  - [ ] Gender maybe.
+  - [ ] Could be others, we'll see
+
+
+
+** Feature howto
+
+I'll briefly explain what every feature should do and more or less how should it be implemented. This could of course change.
+
+*** Title/Artist inference
+
+We want to get as accurate as possible the song name and artist of each song the user wants to download. In order to accomplish this I'll write some guidelines of what should be done.
+
+- Probably everything thats inside parenthesis is garbage unless it has the *feat* word inside it
+- Get rid of everything that looks like a file extension: .wmv, .mp4, etc...
+
+The logic is kind of dumb, but there's not much we can do for a single song. However, this can change when downloading a playlist, because:
+
+- It's likely that an artist will repeat, we can use the occurrences of each artist to infer if we should "flip" artist and song name
+- Get user input: when the UI is done, there should be a possibility to flip artist and song names. This will *definetly* get us an artist name: use this for the point above.
+- More to come as the project grows.
+
+*** Chop off strings
+
+This one can be hard. I already described something in the section above, for now we'll go with deleting everything inside parenthesis unless it has the *feat* word inside it. Note that this should be done *before* deciding the title and artist names.
+
+*** ID3v2 Tags
+
+There's a cool Emacs package that involves playing Spotify music through The One Editor. It gets the metadata from a public spotify querying URL. We should use that here, there's no API key needed and it even gives you the album art's URL, lol.
+
+*** UI generation
+
+This one could be the hardest to do. We'll take a minimal and agile approach to this feature. We'll get some awful UI at some commit points, but the point of agile is to change that permanently. We'll be using Gtk exclusively for this feature, so PyGObject is probably the way to go.
+
+The order of the tasks should be like so:
+
+1. Get a minimal window to show
+2. Show an input field and a download button
+3. Make them show results (for a song first)
+4. The same as above except with playlists
+5. If the UI gets too cluttered, change UI definitions to Glade
+6. Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
+7. Add button to flip artist and song name.
+8. More to come...
