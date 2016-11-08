@@ -7,7 +7,6 @@ import re
 import youtube_dl
 from mutagen.easyid3 import EasyID3
 
-
 YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
 
 
@@ -41,7 +40,7 @@ class Song(object):
     def get_url(self):
         return YOUTUBE_VIDEO_URL + self.info['id']
 
-    def download(self):
+    def download(self, with_auto_tags=True):
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
@@ -57,6 +56,9 @@ class Song(object):
             ydl.download([self.url])
 
         self.location = self.info['id'] + '.mp3'
+
+        if with_auto_tags:
+            self.put_tags()
 
     # This gets a string like
     # (HQ) Gramatik - While I Was Playin' Fair [Beatz & Pieces Vol. 1]
@@ -83,7 +85,7 @@ class Song(object):
                 delete = delete and inside.find(goodword) == -1
 
             if delete:
-                title = title[0:i] + title[k+1:]
+                title = title[0:i] + title[k + 1:]
                 title = title.strip()
 
         return title

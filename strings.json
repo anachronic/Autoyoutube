@@ -1,5 +1,5 @@
 {
     "delimiters": ["-", "|"],
     "delete_inside": ["()", "{}", "[]"],
-    "good_words": ["feat", "mix"]
+    "good_words": ["feat", "mix", "ft"]
 }

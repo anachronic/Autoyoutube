@@ -31,4 +31,3 @@ class Playlist(object):
             song = Song(songs.YOUTUBE_VIDEO_URL + sid)
 
             song.download()
-            song.put_tags()
