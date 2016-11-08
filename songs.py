@@ -26,6 +26,8 @@ class Song(object):
 
             self.info = info
 
+        self.location = None
+
     def get_title(self):
         return self.info['title']
 
@@ -50,8 +52,10 @@ class Song(object):
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.url])
 
+        self.location = self.info['id'] + '.mp3'
+
     def put_tags(self, artistfirst=True, separator='-'):
-        file = self.info['id'] + '.mp3'
+        file = self.location
 
         striped = [x.strip() for x in self.get_title().split(separator)]
 
@@ -68,9 +72,12 @@ class Song(object):
 
         audio.save()
 
-        self.rename(artist + ' - ' + name)
+        self.rename(artist + ' - ' + name + '.mp3')
 
     def rename(self, desiredname):
+        # This will raise an exception if the file doesn't exist anyway
         # TODO: Maybe get absolute path from song and desired name? (or at
         # least save current directory...)
-        os.rename(str(self.info['id']) + '.mp3', str(desiredname) + '.mp3')
+        newloc = str(desiredname)
+        os.rename(self.location, newloc)
+        self.location = newloc
