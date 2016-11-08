@@ -2,9 +2,11 @@ from __future__ import unicode_literals
 
 import json
 import os
+import re
 
 import youtube_dl
 from mutagen.easyid3 import EasyID3
+
 
 YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
 
@@ -63,7 +65,6 @@ class Song(object):
     def strip_bad_words(self, strings_file):
         strings = json.load(open(str(strings_file)))
         title = self.get_title()
-        print(title)
 
         for badpair in strings['delete_inside']:
             start = badpair[0]
@@ -87,11 +88,13 @@ class Song(object):
 
         return title
 
-    def put_tags(self, artistfirst=True, separator='-'):
+    def put_tags(self, separator='-+', artistfirst=True):
         file = self.location
-        title = self.get_title.strip_bad_words('strings.json')
+        title = self.strip_bad_words('strings.json')
 
-        striped = [x.strip() for x in title.split(separator)]
+        self.title = title
+
+        striped = [x.strip() for x in re.split(separator, title)]
 
         if (artistfirst):
             artist = striped[0]
