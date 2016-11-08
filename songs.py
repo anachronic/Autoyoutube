@@ -109,6 +109,8 @@ class Song(object):
 
         audio.save()
 
+        artist = artist.replace("/", "-")
+        name = name.replace("/", "-")
         self.rename(artist + ' - ' + name + '.mp3')
 
     def rename(self, desiredname):
