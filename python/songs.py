@@ -4,9 +4,10 @@ import youtube_dl
 
 from mutagen.easyid3 import EasyID3
 
+YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
+
 
 class DontShowLogger(object):
-
     def debug(self, msg):
         pass
 
@@ -18,7 +19,6 @@ class DontShowLogger(object):
 
 
 class Song(object):
-
     def __init__(self, url):
         self.url = url
         with youtube_dl.YoutubeDL({'quiet': True, 'verbose': False}) as ydl:
@@ -26,11 +26,14 @@ class Song(object):
 
             self.info = info
 
-    def gettitle(self):
+    def get_title(self):
         return self.info['title']
 
-    def getid(self):
+    def get_id(self):
         return self.info['id']
+
+    def get_url(self):
+        return YOUTUBE_VIDEO_URL + self.info['id']
 
     def download(self):
         ydl_opts = {
@@ -50,9 +53,9 @@ class Song(object):
     def put_tags(self, artistfirst=True, separator='-'):
         file = self.info['id'] + '.mp3'
 
-        striped = [x.strip() for x in self.gettitle().split(separator)]
+        striped = [x.strip() for x in self.get_title().split(separator)]
 
-        if(artistfirst):
+        if (artistfirst):
             artist = striped[0]
             name = striped[1]
         else:
