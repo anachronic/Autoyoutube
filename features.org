@@ -17,10 +17,10 @@ This project is intended to do as much work as it possibly can to:
   - [ ] Gender maybe.
   - [ ] Could be others, we'll see
 
-** TODO UI [2/8]
+** TODO UI [3/8]
 1. [X] Get a minimal window to show
 2. [X] Show an input field and a download button
-3. [ ] Make them show results (for a song first)
+3. [X] Make them show results (for a song first)
 4. [ ] The same as above except with playlists
 5. [ ] If the UI gets too cluttered, change UI definitions to Glade
 6. [ ] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
