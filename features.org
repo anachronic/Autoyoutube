@@ -50,6 +50,12 @@ The logic is kind of dumb, but there's not much we can do for a single song. How
 
 This one can be hard. I already described something in the section above, for now we'll go with deleting everything inside parenthesis unless it has the *feat* word inside it. Note that this should be done *before* deciding the title and artist names.
 
+**** WAITING Issues...
+     - State "WAITING"    from "WAITING"    [2016-11-16 mié 21:02] \\
+       Writing about it then I'll start doing this right away. It's a critical one.
+
+I ran into some issues with this one. Turns out i wasn't saving the inferred artist and song names, so I can't actually get them into the ListStore object. We'll see
+
 *** ID3v2 Tags
 
 There's a cool Emacs package that involves playing Spotify music through The One Editor. It gets the metadata from a public spotify querying URL. We should use that here, there's no API key needed and it even gives you the album art's URL, lol.
@@ -68,3 +74,25 @@ The order of the tasks should be like so:
 6. Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
 7. Add button to flip artist and song name.
 8. More to come...
+
+There's a video of how to build a `TreeView' using Python and PyGObject [[https://www.youtube.com/watch?v=vNxhi2a2SpI&list=PL6gx4Cwl9DGBBnHFDEANbv9q8T4CONGZE&index=12][here]]. It also includes manu other Gtk objects. I should check it out as the development of this project starts to grow.
+
+**** TreeView process
+
+This outline displays the work that needs to be done in order to build a TreeView
+
++ Get a list of lists with the stuff that we should display.
++ Create a Gtk.ListStore object
++ Add the items of the first list to the ListStore object
++ Create a Gtk.TreeView
++ For each column *title* create a Gtk.RendererCellText and a Gtk.TreeViewColumn
++ Append the created column to the TreeView
++ pack_start the tree view
+
+There's a code snippet [[https://github.com/buckyroberts/Source-Code-from-Tutorials/blob/master/PythonGTK/Examples/16_tree.py][here]] and a video [[https://www.youtube.com/watch?v=vNxhi2a2SpI&index=12&list=PL6gx4Cwl9DGBBnHFDEANbv9q8T4CONGZE][here]].
+
+There's an important fact that needs to be taken into account for this feature:
+
+#+BEGIN_QUOTE
+If you ever need to update the TreeView with more items and/or candidates, it *suffices* to only append the list into the ListStore object. This so called list is just the list with the new row.
+#+END_QUOTE
