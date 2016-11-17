@@ -16,13 +16,17 @@ class Playlist(object):
             info = ydl.extract_info(self.url, download=False)
 
             self.entries = info['entries']
-            self.ids = []
+            self.name = info['title']
 
+            self.ids = []
             for entry in info['entries']:
                 self.ids.append(entry['id'])
 
     def get_ids(self):
         return self.ids
+
+    def get_name(self):
+        return self.name
 
     def download(self):
         # for every id construct a song object and download it.
