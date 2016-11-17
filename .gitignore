@@ -7,3 +7,6 @@ bin
 *.pyc
 __pycache__
 ayt
+/GPATH
+/GRTAGS
+/GTAGS
