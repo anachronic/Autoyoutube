@@ -19,7 +19,7 @@ class AytWindow(Gtk.Window):
         self.url = Gtk.Entry()
         hbox.pack_start(self.url, True, True, 0)
 
-        button = Gtk.Button(label="Buscar")
+        button = Gtk.Button(label="Search")
         button.connect("clicked", self.on_search)
         hbox.pack_start(button, True, True, 0)
 
@@ -65,15 +65,10 @@ class AytWindow(Gtk.Window):
             self.list_store.append(row)
             self.result_label.set_text(song.get_title())
         else:
-            # This doesn't really look good. But let's do it anyway
-            # The playlist should hold the song ids and the process
-            # should be async since its SLOOOOOOOOOOOOOOOW
             plist = Playlist(url)
-
-            ids = plist.get_ids()
             self.result_label.set_text(plist.get_name())
-            for sid in ids:
-                song = Song(songs.YOUTUBE_VIDEO_URL + sid)
+
+            for song in plist.get_songs():
                 song.fill_song_metadata()
 
                 row = (song.get_artist(), song.get_name())
