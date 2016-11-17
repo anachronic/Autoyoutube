@@ -2,6 +2,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+import songs
+from playlists import Playlist
 from songs import Song
 
 
@@ -53,7 +55,6 @@ class AytWindow(Gtk.Window):
             self.result_label.set_text("That is absolutely not an URL.")
             return
 
-        songs = []
         if not is_playlist:
             song = Song(url)
             song.fill_song_metadata()
@@ -63,6 +64,20 @@ class AytWindow(Gtk.Window):
             row = (song.get_artist(), song.get_name())
             self.list_store.append(row)
             self.result_label.set_text(song.get_title())
+        else:
+            # This doesn't really look good. But let's do it anyway
+            # The playlist should hold the song ids and the process
+            # should be async since its SLOOOOOOOOOOOOOOOW
+            plist = Playlist(url)
+
+            ids = plist.get_ids()
+            for sid in ids:
+                song = Song(songs.YOUTUBE_VIDEO_URL + sid)
+                song.fill_song_metadata()
+
+                row = (song.get_artist(), song.get_name())
+                self.list_store.append(row)
+                self.result_label.set_text("It's a playlist!")
 
 
     def url_is_playlist(self, url):
