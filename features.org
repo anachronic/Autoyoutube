@@ -17,11 +17,11 @@ This project is intended to do as much work as it possibly can to:
   - [ ] Gender maybe.
   - [ ] Could be others, we'll see
 
-** TODO UI [3/8]
+** TODO UI [4/8]
 1. [X] Get a minimal window to show
 2. [X] Show an input field and a download button
 3. [X] Make them show results (for a song first)
-4. [ ] The same as above except with playlists
+4. [X] The same as above except with playlists
 5. [ ] If the UI gets too cluttered, change UI definitions to Glade
 6. [ ] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
 7. [ ] Add button to flip artist and song name.
@@ -50,7 +50,8 @@ The logic is kind of dumb, but there's not much we can do for a single song. How
 
 This one can be hard. I already described something in the section above, for now we'll go with deleting everything inside parenthesis unless it has the *feat* word inside it. Note that this should be done *before* deciding the title and artist names.
 
-**** WAITING Issues...
+**** DONE Issues...
+     - State "DONE"       from "WAITING"    [2016-11-16 mié 21:28]
      - State "WAITING"    from "WAITING"    [2016-11-16 mié 21:02] \\
        Writing about it then I'll start doing this right away. It's a critical one.
 
