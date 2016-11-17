@@ -30,12 +30,20 @@ class Song(object):
             self.info = info
 
         self.location = None
+        self.artist = None
+        self.name = None
 
     def get_title(self):
         return self.info['title']
 
     def get_id(self):
         return self.info['id']
+
+    def get_artist(self):
+        return self.artist
+
+    def get_name(self):
+        return self.name
 
     def get_url(self):
         return YOUTUBE_VIDEO_URL + self.info['id']
@@ -59,6 +67,7 @@ class Song(object):
 
         if with_auto_tags:
             self.put_tags()
+            self.rename(self.artist + ' - ' + self.name + '.mp3')
 
     # This gets a string like
     # (HQ) Gramatik - While I Was Playin' Fair [Beatz & Pieces Vol. 1]
@@ -90,8 +99,7 @@ class Song(object):
 
         return title
 
-    def put_tags(self, separator='-+', artistfirst=True):
-        file = self.location
+    def fill_song_metadata(self, separator='-+', artistfirst=True):
         title = self.strip_bad_words('strings.json')
 
         self.title = title
@@ -99,26 +107,28 @@ class Song(object):
         striped = [x.strip() for x in re.split(separator, title)]
 
         if (artistfirst):
-            artist = striped[0]
-            name = striped[1]
+            self.artist = striped[0]
+            self.name = striped[1]
         else:
-            artist = striped[1]
-            name = striped[0]
+            self.artist = striped[1]
+            self.name = striped[0]
 
+    def put_tags(self):
+        file = self.location
         audio = EasyID3(file)
-        audio['title'] = name
-        audio['artist'] = artist
+
+        if self.artist is None or self.name is None:
+            self.fill_song_metadata()
+
+        audio['title'] = self.name
+        audio['artist'] = self.artist
 
         audio.save()
-
-        artist = artist.replace("/", "-")
-        name = name.replace("/", "-")
-        self.rename(artist + ' - ' + name + '.mp3')
 
     def rename(self, desiredname):
         # This will raise an exception if the file doesn't exist anyway
         # TODO: Maybe get absolute path from song and desired name? (or at
         # least save current directory...)
-        newloc = str(desiredname)
+        newloc = str(desiredname).replace("/", "-")
         os.rename(self.location, newloc)
         self.location = newloc
