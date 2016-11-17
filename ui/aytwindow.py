@@ -50,12 +50,12 @@ class AytWindow(Gtk.Window):
         url = self.url.get_text()
 
         try:
-            is_playlist = self.url_is_playlist(url)
+            is_song = not self.url_is_playlist(url)
         except ValueError:
             self.result_label.set_text("That is absolutely not an URL.")
             return
 
-        if not is_playlist:
+        if is_song:
             song = Song(url)
             song.fill_song_metadata()
             # Append song's artist and title into self.candidates
@@ -71,14 +71,13 @@ class AytWindow(Gtk.Window):
             plist = Playlist(url)
 
             ids = plist.get_ids()
+            self.result_label.set_text(plist.get_name())
             for sid in ids:
                 song = Song(songs.YOUTUBE_VIDEO_URL + sid)
                 song.fill_song_metadata()
 
                 row = (song.get_artist(), song.get_name())
                 self.list_store.append(row)
-                self.result_label.set_text("It's a playlist!")
-
 
     def url_is_playlist(self, url):
         # For now we do this here
