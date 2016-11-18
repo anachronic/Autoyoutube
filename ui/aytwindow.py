@@ -29,9 +29,7 @@ class AytWindow(Gtk.Window):
         self.vbox.pack_start(hbox, True, True, 0)
         self.vbox.pack_start(self.result_label, True, True, 0)
 
-        # we begin with no candidates whatsoever
-        self.candidates = []
-
+        # Build the TreeView and Columns
         self.list_store = Gtk.ListStore(str, str, str)
         self.treeview = Gtk.TreeView(self.list_store)
 
@@ -57,8 +55,13 @@ class AytWindow(Gtk.Window):
         idcol = Gtk.TreeViewColumn("id", renderer, text=2)
         idcol.set_visible(False)
         self.treeview.append_column(idcol)
+        # End of TreeView stuff.
 
         self.vbox.pack_start(self.treeview, True, True, 0)
+
+        # Add the download button at the bottom
+        self.download_button = Gtk.Button(label="Download")
+
 
         self.add(self.vbox)
 
@@ -102,6 +105,9 @@ class AytWindow(Gtk.Window):
 
                 row = (song.get_artist(), song.get_name(), song.get_id())
                 self.list_store.append(row)
+
+        self.vbox.pack_start(self.download_button, True, True, 0)
+        self.download_button.set_visible(True)
 
     def url_is_playlist(self, url):
         # For now we do this here
