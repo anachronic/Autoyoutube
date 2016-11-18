@@ -39,6 +39,13 @@ class Playlist(object):
 
         return self.songs
 
+    def get_song_by_id(self, song_id):
+        for s in self.songs:
+            if s.get_id() == song_id:
+                return s
+
+        return None
+
     def download(self):
         if not self.songs:
             self.get_songs_metadata()

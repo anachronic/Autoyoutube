@@ -34,7 +34,7 @@ class AytWindow(Gtk.Window):
 
         columns = ("Artist", "Song")
 
-        self.list_store = Gtk.ListStore(str, str)
+        self.list_store = Gtk.ListStore(str, str, str)
         self.treeview = Gtk.TreeView(self.list_store)
 
         for i, column in enumerate(columns):
@@ -42,19 +42,24 @@ class AytWindow(Gtk.Window):
 
             col = Gtk.TreeViewColumn(column, renderer, text=i)
             col.set_sort_column_id(i)
-            col.connect('clicked', self.sorted)
+            col.connect('clicked', self.on_sorted)
 
             self.treeview.append_column(col)
+
+        renderer = Gtk.CellRendererText()
+        idcol = Gtk.TreeViewColumn("id", renderer, text=2)
+        idcol.set_visible(False)
+        self.treeview.append_column(idcol)
 
         self.vbox.pack_start(self.treeview, True, True, 0)
 
         self.add(self.vbox)
 
-    def sorted(self, column):
+    def on_sorted(self, column):
         model = self.treeview.get_model()
 
-        for i, _ in enumerate(model):
-            print(i)
+        for i, m in enumerate(model):
+            print(m[2])
 
     def on_search(self, widget):
         url = self.url.get_text()
@@ -71,7 +76,7 @@ class AytWindow(Gtk.Window):
             # Append song's artist and title into self.candidates
             # then add the items to the list_store. that should suffice
 
-            row = (song.get_artist(), song.get_name())
+            row = (song.get_artist(), song.get_name(), song.get_id())
             self.list_store.append(row)
             self.result_label.set_text(song.get_title())
         else:
@@ -81,7 +86,7 @@ class AytWindow(Gtk.Window):
             for song in plist.get_songs():
                 song.fill_song_metadata()
 
-                row = (song.get_artist(), song.get_name())
+                row = (song.get_artist(), song.get_name(), song.get_id())
                 self.list_store.append(row)
 
     def url_is_playlist(self, url):
