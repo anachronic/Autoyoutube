@@ -14,18 +14,22 @@ This project is intended to do as much work as it possibly can to:
 - [X] Put artist and title in ID3v2 tags.
 
 
-** TODO UI [7/11]
-1. [X] Get a minimal window to show
-2. [X] Show an input field and a download button
-3. [X] Make them show results (for a song first)
-4. [X] The same as above except with playlists
-5. [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
-6. [X] Change the display according to edited field
-7. [X] Add download button at the bottom
-8. [ ] Empty model on search call
-9. [ ] Add button to flip artist and song name.
-10. [ ] Async search with spinners and (maybe) threads
-11. [ ] More to come...
+** IN-PROGRESS UI [7/13]
+   State "IN-PROGRESS" from "TODO"       [2016-11-18 vie 04:09]
+
+   1. [X] Get a minimal window to show
+   2. [X] Show an input field and a download button
+   3. [X] Make them show results (for a song first)
+   4. [X] The same as above except with playlists
+   5. [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
+   6. [X] Change the display according to edited field
+   7. [X] Add download button at the bottom
+   8. [ ] Download the actual songs
+   9. [ ] Fix the TreeView disappearing bug
+   10. [ ] Empty model on search call
+   11. [ ] Add button to flip artist and song name.
+   12. [ ] Async search with spinners and (maybe) threads
+   13. [ ] More to come...
 
 ** Possible future TODO
 - [ ] Get metadata from other services in order to (maybe) fill the tags.
