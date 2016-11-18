@@ -32,19 +32,28 @@ class AytWindow(Gtk.Window):
         # we begin with no candidates whatsoever
         self.candidates = []
 
-        columns = ("Artist", "Song")
-
         self.list_store = Gtk.ListStore(str, str, str)
         self.treeview = Gtk.TreeView(self.list_store)
 
-        for i, column in enumerate(columns):
-            renderer = Gtk.CellRendererText()
+        renderer = Gtk.CellRendererText()
+        renderer.set_property("editable", True)
+        renderer.connect("edited", self.on_artist_edited)
 
-            col = Gtk.TreeViewColumn(column, renderer, text=i)
-            col.set_sort_column_id(i)
-            col.connect('clicked', self.on_sorted)
+        col = Gtk.TreeViewColumn("Artist", renderer, text=0)
+        col.set_sort_column_id(0)
+        col.connect('clicked', self.on_sorted)
 
-            self.treeview.append_column(col)
+        self.treeview.append_column(col)
+
+        renderer = Gtk.CellRendererText()
+        renderer.set_property("editable", True)
+        renderer.connect("edited", self.on_songname_edited)
+
+        col = Gtk.TreeViewColumn("Song", renderer, text=1)
+        col.set_sort_column_id(1)
+        col.connect('clicked', self.on_sorted)
+
+        self.treeview.append_column(col)
 
         renderer = Gtk.CellRendererText()
         idcol = Gtk.TreeViewColumn("id", renderer, text=2)
@@ -60,6 +69,19 @@ class AytWindow(Gtk.Window):
 
         for i, m in enumerate(model):
             print(m[2])
+
+    # TODO: Maybe unify these two? They are so similar...
+    def on_artist_edited(self, cellrenderer, path, new_text):
+        model = self.treeview.get_model()
+        iter = model.get_iter_from_string(path)
+
+        model.set(iter, [0], [new_text])
+
+    def on_songname_edited(self, cellrenderer, path, new_text):
+        model = self.treeview.get_model()
+        iter = model.get_iter_from_string(path)
+
+        model.set(iter, [1], [new_text])
 
     def on_search(self, widget):
         url = self.url.get_text()
