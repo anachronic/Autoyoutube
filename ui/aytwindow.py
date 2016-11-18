@@ -41,7 +41,6 @@ class AytWindow(Gtk.Window):
 
         col = Gtk.TreeViewColumn("Artist", renderer, text=0)
         col.set_sort_column_id(0)
-        col.connect('clicked', self.on_sorted)
 
         self.treeview.append_column(col)
 
@@ -51,7 +50,6 @@ class AytWindow(Gtk.Window):
 
         col = Gtk.TreeViewColumn("Song", renderer, text=1)
         col.set_sort_column_id(1)
-        col.connect('clicked', self.on_sorted)
 
         self.treeview.append_column(col)
 
@@ -63,12 +61,6 @@ class AytWindow(Gtk.Window):
         self.vbox.pack_start(self.treeview, True, True, 0)
 
         self.add(self.vbox)
-
-    def on_sorted(self, column):
-        model = self.treeview.get_model()
-
-        for i, m in enumerate(model):
-            print(m[2])
 
     # TODO: Maybe unify these two? They are so similar...
     def on_artist_edited(self, cellrenderer, path, new_text):
