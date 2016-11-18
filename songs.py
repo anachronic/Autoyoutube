@@ -45,10 +45,16 @@ class Song(object):
     def get_name(self):
         return self.name
 
+    def set_name(self, name):
+        self.name = name
+
+    def set_artist(self, artist):
+        self.artist = artist
+
     def get_url(self):
         return YOUTUBE_VIDEO_URL + self.info['id']
 
-    def download(self, with_auto_tags=True):
+    def download(self, with_auto_tags=True, auto_rename=True):
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
@@ -67,6 +73,8 @@ class Song(object):
 
         if with_auto_tags:
             self.put_tags()
+
+        if auto_rename:
             self.rename(self.artist + ' - ' + self.name + '.mp3')
 
     # This gets a string like
