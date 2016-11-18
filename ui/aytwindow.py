@@ -44,11 +44,21 @@ class AytWindow(Gtk.Window):
 
         model.set(iter, [0], [new_text])
 
+        # change the song's artist
+        # The 2 there is the id column
+        song = self.get_song_by_id(model[path][2])
+        song.set_artist(new_text)
+
     def on_songname_edited(self, cellrenderer, path, new_text):
         model = self.treeview.get_model()
         iter = model.get_iter_from_string(path)
 
         model.set(iter, [1], [new_text])
+
+        # Same as def above: change song's name
+        # The 2 below corresponds to the id column
+        song = self.get_song_by_id(model[path][2])
+        song.set_name(new_text)
 
     def on_search(self, widget):
         url = self.url.get_text()
@@ -59,6 +69,8 @@ class AytWindow(Gtk.Window):
             self.result_label.set_text("That is absolutely not an URL.")
             return
 
+        self.songs = []
+
         if is_song:
             song = Song(url)
             song.fill_song_metadata()
@@ -68,6 +80,7 @@ class AytWindow(Gtk.Window):
             row = (song.get_artist(), song.get_name(), song.get_id())
             self.list_store.append(row)
             self.result_label.set_text(song.get_title())
+            self.songs.append(song)
         else:
             plist = Playlist(url)
             self.result_label.set_text(plist.get_name())
@@ -77,6 +90,7 @@ class AytWindow(Gtk.Window):
 
                 row = (song.get_artist(), song.get_name(), song.get_id())
                 self.list_store.append(row)
+                self.songs.append(song)
 
         self.vbox.pack_start(self.download_button, True, True, 0)
         self.download_button.set_visible(True)
@@ -84,22 +98,6 @@ class AytWindow(Gtk.Window):
 
     def on_download(self, widget):
         print("downloading")
-
-    def url_is_playlist(self, url):
-        # For now we do this here
-        # TODO: Need to move this somewhere else
-        playlist_words = ("list=", "playlist?")
-        assert_words = ("youtube.com")
-
-        for word in assert_words:
-            if url.find(word) == -1:
-                raise ValueError
-
-        for word in playlist_words:
-            if url.find(word) >= 0:
-                return True
-
-        return False
 
     def build_tree_view(self):
         # Build the TreeView and Columns
@@ -129,3 +127,31 @@ class AytWindow(Gtk.Window):
         idcol.set_visible(False)
         self.treeview.append_column(idcol)
         # End of TreeView stuff.
+
+    # defuns from here to bottom should be moved to another file at
+    # some point
+    def url_is_playlist(self, url):
+        # For now we do this here
+        # TODO: Need to move this somewhere else
+        playlist_words = ("list=", "playlist?")
+        assert_words = ("youtube.com")
+
+        for word in assert_words:
+            if url.find(word) == -1:
+                raise ValueError
+
+        for word in playlist_words:
+            if url.find(word) >= 0:
+                return True
+
+        return False
+
+    def get_song_by_id(self, id):
+        if not self.songs:
+            return None
+
+        for s in self.songs:
+            if s.get_id() == id:
+                return s
+
+        return None
