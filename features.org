@@ -6,16 +6,13 @@ Of course, this is *not* a readme. This file is intended to help myself organize
 
 This project is intended to do as much work as it possibly can to:
 
-** TODO Work [4/5]
+** DONE Work [4/4]
+   - State "DONE"       from "TODO"       [2016-11-18 vie 03:17]
 - [X] Infer the title
 - [X] Infer the artist
 - [X] Chop off unnecessary strings in the video like: (OFFICIAL VIDEO)
 - [X] Put artist and title in ID3v2 tags.
-- [ ] Get metadata from other services in order to (maybe) fill the tags.
-  Tags including:
-  - [ ] Album art
-  - [ ] Gender maybe.
-  - [ ] Could be others, we'll see
+
 
 ** TODO UI [7/11]
 1. [X] Get a minimal window to show
@@ -30,6 +27,12 @@ This project is intended to do as much work as it possibly can to:
 10. [ ] Async search with spinners and (maybe) threads
 11. [ ] More to come...
 
+** Possible future TODO
+- [ ] Get metadata from other services in order to (maybe) fill the tags.
+  Tags including:
+  - [ ] Album art
+  - [ ] Gender maybe.
+  - [ ] Could be others, we'll see
 
 
 ** Feature howto
