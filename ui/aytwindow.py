@@ -96,8 +96,18 @@ class AytWindow(Gtk.Window):
         self.download_button.set_visible(True)
         self.download_button.connect("clicked", self.on_download)
 
+        self.treeview.show()
+
     def on_download(self, widget):
-        print("downloading")
+        # Need to extract them from the model, otherwise we would
+        # download the songs in a chaotic order. Especially if the
+        # user changed artist/song names and/or ordered the treeview
+        model = self.treeview.get_model()
+
+        for row in model:
+            song = self.get_song_by_id(row[2])
+            print('downloading ' + song.get_artist() + ' by ' + song.get_name(
+            ))
 
     def build_tree_view(self):
         # Build the TreeView and Columns
@@ -130,6 +140,7 @@ class AytWindow(Gtk.Window):
 
     # defuns from here to bottom should be moved to another file at
     # some point
+
     def url_is_playlist(self, url):
         # For now we do this here
         # TODO: Need to move this somewhere else
