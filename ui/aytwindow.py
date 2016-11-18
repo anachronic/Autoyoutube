@@ -39,12 +39,22 @@ class AytWindow(Gtk.Window):
 
         for i, column in enumerate(columns):
             renderer = Gtk.CellRendererText()
+
             col = Gtk.TreeViewColumn(column, renderer, text=i)
+            col.set_sort_column_id(i)
+            col.connect('clicked', self.sorted)
+
             self.treeview.append_column(col)
 
         self.vbox.pack_start(self.treeview, True, True, 0)
 
         self.add(self.vbox)
+
+    def sorted(self, column):
+        model = self.treeview.get_model()
+
+        for i, _ in enumerate(model):
+            print(i)
 
     def on_search(self, widget):
         url = self.url.get_text()
