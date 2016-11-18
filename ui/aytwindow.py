@@ -2,7 +2,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-import songs
 from playlists import Playlist
 from songs import Song
 
@@ -35,7 +34,6 @@ class AytWindow(Gtk.Window):
 
         # Add the download button at the bottom
         self.download_button = Gtk.Button(label="Download")
-
 
         self.add(self.vbox)
 
