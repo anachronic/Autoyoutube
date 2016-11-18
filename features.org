@@ -17,15 +17,18 @@ This project is intended to do as much work as it possibly can to:
   - [ ] Gender maybe.
   - [ ] Could be others, we'll see
 
-** TODO UI [4/8]
+** TODO UI [6/11]
 1. [X] Get a minimal window to show
 2. [X] Show an input field and a download button
 3. [X] Make them show results (for a song first)
 4. [X] The same as above except with playlists
-5. [ ] If the UI gets too cluttered, change UI definitions to Glade
-6. [ ] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
-7. [ ] Add button to flip artist and song name.
-8. [ ] More to come...
+5. [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
+6. [X] Change the display according to edited field
+7. [ ] Add download button at the bottom
+8. [ ] Empty model on search call
+9. [ ] Add button to flip artist and song name.
+10. [ ] Async search with spinners and (maybe) threads
+11. [ ] More to come...
 
 
 
