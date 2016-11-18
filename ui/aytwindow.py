@@ -29,33 +29,7 @@ class AytWindow(Gtk.Window):
         self.vbox.pack_start(hbox, True, True, 0)
         self.vbox.pack_start(self.result_label, True, True, 0)
 
-        # Build the TreeView and Columns
-        self.list_store = Gtk.ListStore(str, str, str)
-        self.treeview = Gtk.TreeView(self.list_store)
-
-        renderer = Gtk.CellRendererText()
-        renderer.set_property("editable", True)
-        renderer.connect("edited", self.on_artist_edited)
-
-        col = Gtk.TreeViewColumn("Artist", renderer, text=0)
-        col.set_sort_column_id(0)
-
-        self.treeview.append_column(col)
-
-        renderer = Gtk.CellRendererText()
-        renderer.set_property("editable", True)
-        renderer.connect("edited", self.on_songname_edited)
-
-        col = Gtk.TreeViewColumn("Song", renderer, text=1)
-        col.set_sort_column_id(1)
-
-        self.treeview.append_column(col)
-
-        renderer = Gtk.CellRendererText()
-        idcol = Gtk.TreeViewColumn("id", renderer, text=2)
-        idcol.set_visible(False)
-        self.treeview.append_column(idcol)
-        # End of TreeView stuff.
+        self.build_tree_view()
 
         self.vbox.pack_start(self.treeview, True, True, 0)
 
@@ -108,6 +82,10 @@ class AytWindow(Gtk.Window):
 
         self.vbox.pack_start(self.download_button, True, True, 0)
         self.download_button.set_visible(True)
+        self.download_button.connect("clicked", self.on_download)
+
+    def on_download(self, widget):
+        print("downloading")
 
     def url_is_playlist(self, url):
         # For now we do this here
@@ -124,3 +102,32 @@ class AytWindow(Gtk.Window):
                 return True
 
         return False
+
+    def build_tree_view(self):
+        # Build the TreeView and Columns
+        self.list_store = Gtk.ListStore(str, str, str)
+        self.treeview = Gtk.TreeView(self.list_store)
+
+        renderer = Gtk.CellRendererText()
+        renderer.set_property("editable", True)
+        renderer.connect("edited", self.on_artist_edited)
+
+        col = Gtk.TreeViewColumn("Artist", renderer, text=0)
+        col.set_sort_column_id(0)
+
+        self.treeview.append_column(col)
+
+        renderer = Gtk.CellRendererText()
+        renderer.set_property("editable", True)
+        renderer.connect("edited", self.on_songname_edited)
+
+        col = Gtk.TreeViewColumn("Song", renderer, text=1)
+        col.set_sort_column_id(1)
+
+        self.treeview.append_column(col)
+
+        renderer = Gtk.CellRendererText()
+        idcol = Gtk.TreeViewColumn("id", renderer, text=2)
+        idcol.set_visible(False)
+        self.treeview.append_column(idcol)
+        # End of TreeView stuff.
