@@ -113,10 +113,10 @@ class AytWindow(Gtk.Window):
             songs.append(song)
 
         thread = threading.Thread(target=downloading.async_download,
-                                  args=(songs, self.result_label))
+                                  args=(songs, self.result_label),
+                                  daemon=True)
         thread.start()
 
-        thread.join()
         self.result_label.set_text('Done downloading.')
 
     def build_tree_view(self):
