@@ -4,7 +4,7 @@ import threading
 
 from gi.repository import Gtk
 
-from ui.async import downloading
+import async
 from playlists import Playlist
 from songs import Song
 
@@ -112,7 +112,7 @@ class AytWindow(Gtk.Window):
             song = self.get_song_by_id(row[2])
             songs.append(song)
 
-        thread = threading.Thread(target=downloading.async_download,
+        thread = threading.Thread(target=async.async_download,
                                   args=(songs, self.result_label),
                                   daemon=True)
         thread.start()
