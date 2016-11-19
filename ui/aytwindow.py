@@ -1,7 +1,10 @@
 import gi
 gi.require_version('Gtk', '3.0')
+import threading
+
 from gi.repository import Gtk
 
+from ui.async import downloading
 from playlists import Playlist
 from songs import Song
 
@@ -103,13 +106,18 @@ class AytWindow(Gtk.Window):
         # download the songs in a chaotic order. Especially if the
         # user changed artist/song names and/or ordered the treeview
         model = self.treeview.get_model()
+        songs = []
 
         for row in model:
             song = self.get_song_by_id(row[2])
-            msg = 'Downloading ' + song.get_name() + ' by ' + song.get_artist()
+            songs.append(song)
 
-            self.result_label.set_text(msg)
-            song.download()
+        thread = threading.Thread(target=downloading.async_download,
+                                  args=(songs, self.result_label))
+        thread.start()
+
+        thread.join()
+        self.result_label.set_text('Done downloading.')
 
     def build_tree_view(self):
         # Build the TreeView and Columns
