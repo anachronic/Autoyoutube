@@ -9,12 +9,11 @@ from gi.repository import GLib
 def async_download(songs, label):
     for song in songs:
         msg = 'Downloading ' + song.get_name() + ' by ' + song.get_artist()
-        GLib.idle_add(update_label, label, msg)
 
-        label.set_text(msg)
+        GLib.idle_add(update_label, label, msg)
         song.download()
 
-    label.set_text('Done downloading')
+    update_label(label, 'Done downloading.')
 
 
 def update_label(label, message):
