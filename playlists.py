@@ -48,7 +48,7 @@ class Playlist(object):
 
     def download(self):
         if not self.songs:
-            self.get_songs_metadata()
+            self.get_songs()
 
         for song in self.songs:
             song.download()
