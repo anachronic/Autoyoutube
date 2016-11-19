@@ -7,6 +7,7 @@ from gi.repository import Gtk
 import async
 from playlists import Playlist
 from songs import Song
+from util import url_is_playlist, get_song_by_id
 
 
 class AytWindow(Gtk.Window):
@@ -49,7 +50,7 @@ class AytWindow(Gtk.Window):
 
         # change the song's artist
         # The 2 there is the id column
-        song = self.get_song_by_id(model[path][2])
+        song = get_song_by_id(self.songs, model[path][2])
         song.set_artist(new_text)
 
     def on_songname_edited(self, cellrenderer, path, new_text):
@@ -60,14 +61,14 @@ class AytWindow(Gtk.Window):
 
         # Same as def above: change song's name
         # The 2 below corresponds to the id column
-        song = self.get_song_by_id(model[path][2])
+        song = get_song_by_id(self.songs, model[path][2])
         song.set_name(new_text)
 
     def on_search(self, widget):
         url = self.url.get_text()
 
         try:
-            is_song = not self.url_is_playlist(url)
+            is_song = not url_is_playlist(url)
         except ValueError:
             self.result_label.set_text("That is absolutely not an URL.")
             return
@@ -109,7 +110,7 @@ class AytWindow(Gtk.Window):
         songs = []
 
         for row in model:
-            song = self.get_song_by_id(row[2])
+            song = get_song_by_id(self.songs, row[2])
             songs.append(song)
 
         thread = threading.Thread(target=async.async_download,
@@ -147,32 +148,3 @@ class AytWindow(Gtk.Window):
         idcol.set_visible(False)
         self.treeview.append_column(idcol)
         # End of TreeView stuff.
-
-    # defuns from here to bottom should be moved to another file at
-    # some point
-
-    def url_is_playlist(self, url):
-        # For now we do this here
-        # TODO: Need to move this somewhere else
-        playlist_words = ("list=", "playlist?")
-        assert_words = ("youtube.com")
-
-        for word in assert_words:
-            if url.find(word) == -1:
-                raise ValueError
-
-        for word in playlist_words:
-            if url.find(word) >= 0:
-                return True
-
-        return False
-
-    def get_song_by_id(self, id):
-        if not self.songs:
-            return None
-
-        for s in self.songs:
-            if s.get_id() == id:
-                return s
-
-        return None
