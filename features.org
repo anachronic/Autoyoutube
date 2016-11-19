@@ -14,7 +14,7 @@ This project is intended to do as much work as it possibly can to:
 - [X] Put artist and title in ID3v2 tags.
 
 
-** IN-PROGRESS UI [8/13]
+** IN-PROGRESS UI [9/12]
    State "IN-PROGRESS" from "TODO"       [2016-11-18 vie 04:09]
 
    1. [X] Get a minimal window to show
@@ -25,12 +25,10 @@ This project is intended to do as much work as it possibly can to:
    6. [X] Change the display according to edited field
    7. [X] Add download button at the bottom
    8. [X] Download the actual songs
-   9. [ ] Use threading to download the songs.
+   9. [X] Use threading to download the songs.
    10. [ ] Fix the TreeView disappearing bug
    11. [ ] Empty model on search call
    12. [ ] Add button to flip artist and song name.
-   13. [ ] Async search with spinners and (maybe) threads
-   14. [ ] More to come...
 
 ** Possible future TODO
 - [ ] Get metadata from other services in order to (maybe) fill the tags.
@@ -40,11 +38,7 @@ This project is intended to do as much work as it possibly can to:
   - [ ] Could be others, we'll see
 
 
-** Feature howto
-
-I'll briefly explain what every feature should do and more or less how should it be implemented. This could of course change.
-
-*** Title/Artist inference
+** Title/Artist inference
 
 We want to get as accurate as possible the song name and artist of each song the user wants to download. In order to accomplish this I'll write some guidelines of what should be done.
 
@@ -57,7 +51,7 @@ The logic is kind of dumb, but there's not much we can do for a single song. How
 - Get user input: when the UI is done, there should be a possibility to flip artist and song names. This will *definetly* get us an artist name: use this for the point above.
 - More to come as the project grows.
 
-*** Chop off strings
+** Chop off strings
 
 This one can be hard. I already described something in the section above, for now we'll go with deleting everything inside parenthesis unless it has the *feat* word inside it. Note that this should be done *before* deciding the title and artist names.
 
@@ -68,15 +62,19 @@ This one can be hard. I already described something in the section above, for no
 
 I ran into some issues with this one. Turns out i wasn't saving the inferred artist and song names, so I can't actually get them into the ListStore object. We'll see
 
-*** ID3v2 Tags
+** ID3v2 Tags
 
 There's a cool Emacs package that involves playing Spotify music through The One Editor. It gets the metadata from a public spotify querying URL. We should use that here, there's no API key needed and it even gives you the album art's URL, lol.
 
-*** Threading
+** Threading
     Turns out every youtube_dl operation blocks the UI for quite a while. That is absolutely not acceptable. What we want is for this operation to be non-blocking on the UI. According to the GNOME project (owners and developers of Gtk.), we should *not* run any time-consuming operations in the main loop. So this project needs a little threading.
 
 Since this is a new issue to be done. Some investigation has to be done. For now, there's a link [[https://wiki.gnome.org/Projects/PyGObject/Threading][in the GNOME project page]].
-*** UI generation
+
+It worked pretty well, I ended up using a daemon thread and GLib.idle_add and it works quite well.
+
+Next step is probably implement it for searching through playlists and song.
+** UI generation
 
 This one could be the hardest to do. We'll take a minimal and agile approach to this feature. We'll get some awful UI at some commit points, but the point of agile is to change that permanently. We'll be using Gtk exclusively for this feature, so PyGObject is probably the way to go.
 
