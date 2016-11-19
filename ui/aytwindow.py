@@ -106,8 +106,10 @@ class AytWindow(Gtk.Window):
 
         for row in model:
             song = self.get_song_by_id(row[2])
-            print('downloading ' + song.get_artist() + ' by ' + song.get_name(
-            ))
+            msg = 'Downloading ' + song.get_name() + ' by ' + song.get_artist()
+
+            self.result_label.set_text(msg)
+            song.download()
 
     def build_tree_view(self):
         # Build the TreeView and Columns

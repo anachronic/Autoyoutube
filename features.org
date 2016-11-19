@@ -14,7 +14,7 @@ This project is intended to do as much work as it possibly can to:
 - [X] Put artist and title in ID3v2 tags.
 
 
-** IN-PROGRESS UI [7/13]
+** IN-PROGRESS UI [8/13]
    State "IN-PROGRESS" from "TODO"       [2016-11-18 vie 04:09]
 
    1. [X] Get a minimal window to show
@@ -24,12 +24,13 @@ This project is intended to do as much work as it possibly can to:
    5. [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
    6. [X] Change the display according to edited field
    7. [X] Add download button at the bottom
-   8. [ ] Download the actual songs
-   9. [ ] Fix the TreeView disappearing bug
-   10. [ ] Empty model on search call
-   11. [ ] Add button to flip artist and song name.
-   12. [ ] Async search with spinners and (maybe) threads
-   13. [ ] More to come...
+   8. [X] Download the actual songs
+   9. [ ] Use threading to download the songs.
+   10. [ ] Fix the TreeView disappearing bug
+   11. [ ] Empty model on search call
+   12. [ ] Add button to flip artist and song name.
+   13. [ ] Async search with spinners and (maybe) threads
+   14. [ ] More to come...
 
 ** Possible future TODO
 - [ ] Get metadata from other services in order to (maybe) fill the tags.
@@ -71,6 +72,10 @@ I ran into some issues with this one. Turns out i wasn't saving the inferred art
 
 There's a cool Emacs package that involves playing Spotify music through The One Editor. It gets the metadata from a public spotify querying URL. We should use that here, there's no API key needed and it even gives you the album art's URL, lol.
 
+*** Threading
+    Turns out every youtube_dl operation blocks the UI for quite a while. That is absolutely not acceptable. What we want is for this operation to be non-blocking on the UI. According to the GNOME project (owners and developers of Gtk.), we should *not* run any time-consuming operations in the main loop. So this project needs a little threading.
+
+Since this is a new issue to be done. Some investigation has to be done. For now, there's a link [[https://wiki.gnome.org/Projects/PyGObject/Threading][in the GNOME project page]].
 *** UI generation
 
 This one could be the hardest to do. We'll take a minimal and agile approach to this feature. We'll get some awful UI at some commit points, but the point of agile is to change that permanently. We'll be using Gtk exclusively for this feature, so PyGObject is probably the way to go.
