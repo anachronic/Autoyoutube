@@ -39,6 +39,9 @@ class AytWindow(Gtk.Window):
         # Add the download button at the bottom
         self.download_button = Gtk.Button(label="Download")
 
+        self.download_button.set_visible(False)
+        self.download_button.connect('clicked', self.on_download)
+
         self.add(self.vbox)
 
     # TODO: Maybe unify these two? They are so similar...
@@ -76,15 +79,11 @@ class AytWindow(Gtk.Window):
         self.songs = []
 
         if is_song:
-            song = Song(url)
-            song.fill_song_metadata()
-            # Append song's artist and title into self.candidates
-            # then add the items to the list_store. that should suffice
+            thread = threading.Thread(target=async.async_search,
+                                      args=(url, self),
+                                      daemon=True)
 
-            row = (song.get_artist(), song.get_name(), song.get_id())
-            self.list_store.append(row)
-            self.result_label.set_text(song.get_title())
-            self.songs.append(song)
+            thread.start()
         else:
             plist = Playlist(url)
             self.result_label.set_text(plist.get_name())
@@ -96,11 +95,6 @@ class AytWindow(Gtk.Window):
                 self.list_store.append(row)
                 self.songs.append(song)
 
-        self.vbox.pack_start(self.download_button, True, True, 0)
-        self.download_button.set_visible(True)
-        self.download_button.connect("clicked", self.on_download)
-
-        self.treeview.show()
 
     def on_download(self, widget):
         # Need to extract them from the model, otherwise we would
@@ -117,8 +111,6 @@ class AytWindow(Gtk.Window):
                                   args=(songs, self.result_label),
                                   daemon=True)
         thread.start()
-
-        self.result_label.set_text('Done downloading.')
 
     def build_tree_view(self):
         # Build the TreeView and Columns
