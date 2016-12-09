@@ -70,31 +70,12 @@ class AytWindow(Gtk.Window):
     def on_search(self, widget):
         url = self.url.get_text()
 
-        try:
-            is_song = not url_is_playlist(url)
-        except ValueError:
-            self.result_label.set_text("That is absolutely not an URL.")
-            return
-
         self.songs = []
 
-        if is_song:
-            thread = threading.Thread(target=async.async_search,
-                                      args=(url, self),
-                                      daemon=True)
+        thread = threading.Thread(
+            target=async.async_search, args=(url, self), daemon=True)
 
-            thread.start()
-        else:
-            plist = Playlist(url)
-            self.result_label.set_text(plist.get_name())
-
-            for song in plist.get_songs():
-                song.fill_song_metadata()
-
-                row = (song.get_artist(), song.get_name(), song.get_id())
-                self.list_store.append(row)
-                self.songs.append(song)
-
+        thread.start()
 
     def on_download(self, widget):
         # Need to extract them from the model, otherwise we would
@@ -107,9 +88,10 @@ class AytWindow(Gtk.Window):
             song = get_song_by_id(self.songs, row[2])
             songs.append(song)
 
-        thread = threading.Thread(target=async.async_download,
-                                  args=(songs, self.result_label),
-                                  daemon=True)
+        thread = threading.Thread(
+            target=async.async_download,
+            args=(songs, self.result_label),
+            daemon=True)
         thread.start()
 
     def build_tree_view(self):

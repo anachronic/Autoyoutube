@@ -17,18 +17,19 @@ This project is intended to do as much work as it possibly can to:
 ** IN-PROGRESS UI [9/12]
    State "IN-PROGRESS" from "TODO"       [2016-11-18 vie 04:09]
 
-   1. [X] Get a minimal window to show
-   2. [X] Show an input field and a download button
-   3. [X] Make them show results (for a song first)
-   4. [X] The same as above except with playlists
-   5. [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
-   6. [X] Change the display according to edited field
-   7. [X] Add download button at the bottom
-   8. [X] Download the actual songs
-   9. [X] Use threading to download the songs.
-   10. [ ] Fix the TreeView disappearing bug
-   11. [ ] Empty model on search call
-   12. [ ] Add button to flip artist and song name.
+   + [X] Get a minimal window to show
+   + [X] Show an input field and a download button
+   + [X] Make them show results (for a song first)
+   + [X] The same as above except with playlists
+   + [X] Add Editable cells field (example with `gtk3-demo` -> Tree view -> Editable cells)
+   + [X] Change the display according to edited field
+   + [X] Add download button at the bottom
+   + [X] Download the actual songs
+   + [X] Use threading to download the songs.
+   + [ ] Fix the TreeView disappearing bug
+   + [ ] Empty model on search call
+   + [ ] Add button to flip artist and song name.
+   + [ ] Make the return/enter key to actually search the song
 
 ** Possible future TODO
 - [ ] Get metadata from other services in order to (maybe) fill the tags.

@@ -1,5 +1,7 @@
 from gi.repository import GLib
 
+import util
+from playlists import Playlist
 from songs import Song
 
 
@@ -23,14 +25,26 @@ def update_label(label, message):
 
 
 def async_search(url, window):
-    # only for song right now
-    song = Song(url)
+    if not util.url_is_playlist(url):
+        song = Song(url)
 
-    song.fill_song_metadata()
-    row = (song.get_artist(), song.get_name(), song.get_id())
-    window.list_store.append(row)
-    window.result_label.set_text(song.get_title())
-    window.songs.append(song)
+        song.fill_song_metadata()
+        row = (song.get_artist(), song.get_name(), song.get_id())
+        window.list_store.append(row)
+        window.result_label.set_text(song.get_title())
+        window.songs.append(song)
+
+    else:
+        # url is a playlist.
+        plist = Playlist(url)
+
+        window.result_label.set_text(plist.get_name())
+
+        for song in plist.get_songs():
+            song.fill_song_metadata()
+            row = (song.get_artist(), song.get_name(), song.get_id())
+            window.list_store.append(row)
+            window.songs.append(song)
 
     show_download_button(window)
 
