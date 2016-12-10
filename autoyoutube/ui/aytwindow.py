@@ -23,9 +23,10 @@ class AytWindow(Gtk.Window):
         hbox.pack_start(self.url, True, True, 0)
 
         button = Gtk.Button(label="Search")
-        button.connect("clicked", self.on_search)
         hbox.pack_start(button, True, True, 0)
 
+        button.connect("clicked", self.on_search)
+        self.url.connect("activate", self.on_search)
         self.result_label = Gtk.Label()
 
         self.vbox = Gtk.Box(spacing=6, orientation=Gtk.Orientation.VERTICAL)

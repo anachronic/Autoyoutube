@@ -14,7 +14,7 @@ This project is intended to do as much work as it possibly can to:
 - [X] Put artist and title in ID3v2 tags.
 
 
-** IN-PROGRESS UI [9/12]
+** IN-PROGRESS UI [11/13]
    State "IN-PROGRESS" from "TODO"       [2016-11-18 vie 04:09]
 
    + [X] Get a minimal window to show
@@ -26,10 +26,10 @@ This project is intended to do as much work as it possibly can to:
    + [X] Add download button at the bottom
    + [X] Download the actual songs
    + [X] Use threading to download the songs.
-   + [ ] Fix the TreeView disappearing bug
+   + [X] Fix the TreeView disappearing bug
    + [ ] Empty model on search call
    + [ ] Add button to flip artist and song name.
-   + [ ] Make the return/enter key to actually search the song
+   + [X] Make the return/enter key to actually search the song
 
 ** Possible future TODO
 - [ ] Get metadata from other services in order to (maybe) fill the tags.
